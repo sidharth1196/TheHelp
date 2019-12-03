@@ -1,0 +1,20 @@
+{% extends "Home/header.html" %}
+{% block content %}
+<div class="col-sm-8 text-left"> 
+  <h1>Service</h1>
+  <p>Please choose the personel you would like for the service you're availing. </p>
+  {% for worker in workers %}
+  <div>
+    <div class="col-sm-4">
+       <img class="img-thumbnail" alt="Personel Img"> 
+    </div>
+    <div class="col-sm-8">
+      <h3>Name : {{ worker.first_name}} {{ worker.last_name }}</h3>
+      <p>e-mail : {{ worker.user.email }}</p>
+      <p>Basic Charge : {{ worker.basic_charge }}</p>
+      <button type="button" class="btn btn-primary">Book</button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
