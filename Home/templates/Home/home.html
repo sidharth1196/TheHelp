@@ -5,7 +5,7 @@
 <div class="col-sm-8 text-left"> 
   <h1>Welcome!</h1>
   <p>Please choose the service you would like to avail. </p>
-  {% for work in object_list %}
+  {% for work in works %}
   <div class="col-sm-4">
     <a class="btn btn-primary btn-lg" href="/user/work/{{work.id}}">{{ work.title }}</a>
   </div>

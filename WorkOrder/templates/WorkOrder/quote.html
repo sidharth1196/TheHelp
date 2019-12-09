@@ -1,0 +1,18 @@
+{% extends "Home/header.html" %}
+{% block content %}
+<div class="col-sm-8 text-left">
+    {% if generated %}
+        <h1>Quote generated!</h1>
+    {% else %}
+    <h1>Register Here</h1>
+    <h3>Just fill out the form.</h3>
+    <div class="col-sm-6">
+        <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ quote_form.as_p }}
+        <input type="submit" name="" value="Register">
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

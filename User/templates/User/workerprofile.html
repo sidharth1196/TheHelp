@@ -1,0 +1,122 @@
+{% extends "Home/header.html" %}
+
+{% block content %}
+<div class="col-sm-8 text-left"> 
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Profile</a></li>
+        <li><a data-toggle="tab" href="#menu1">Edit profile</a></li>
+        <li><a data-toggle="tab" href="#menu2">Active Quotes</a></li>
+        <li><a data-toggle="tab" href="#menu3">Active Orders</a></li>
+    </ul>	
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <h3>Personal Info</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th scope="row">First Name</th>
+                        <td>{{data.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Last Name</th>
+                        <td>{{ data.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Phone</th>
+                        <td>{{ data.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Basic Charge</th>
+                        <td>{{ data.basic_charge }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Earned</th>
+                        <td>{{ data.total_money }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <h3>Edit Profile</h3>
+            <form method="post" action="/user/save_workerprofile/{{data.id}}">
+            {% csrf_token %}
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">First Name</th>
+                            <td><input type="text" name="first_name" value={{ data.first_name }}></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Last Name</th>
+                            <td><input type="text" name="last_name" value={{ data.last_name }}></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Phone</th>
+                            <td><input type="text" name="phone" value={{ data.phone }}></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Basic Charge</th>
+                            <td><input type="text" name="basic_charge" value={{ data.basic_charge }}></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="submit" value="Save">          
+            </form>  
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h3>Active Quotes</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <th>Descpription</th>
+                        <th>Charge</th>
+                        <th>Last Modified</th>
+                        <th>Start Date</th>
+                        <th>Comments</th>
+                        <th>Accept/Reject</th>
+                    </tr>
+                    {% for q in quotes %}
+                    <tr>
+                        <td>{{ q.title }}</td>
+                        <td>{{ q.work_desc }}</td>
+                        <td>{{ q.charge }}</td>
+                        <td>{{ q.modified_date }}</td>
+                        <td>{{ q.start_date }}</td>
+                        <td>{{ q.comments }}</td>
+                        <td><a class="btn btn-primary" href="/order/confirm/{{data.user.id}}/{{q.id}}">Accept</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <h3>Active Orders</h3>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Title</th>
+                        <th>Start Date</th>
+                        <th>Completed Date</th>
+                        <th>Status</th>
+                        {% if o.status != 'Completed' %}
+                        <th>Completed?</th>
+                        {% endif%}
+                    </tr>
+                    {% for o in orders %}
+                    <tr>
+                        <td>{{ o.title }}</td>
+                        <td>{{ o.quote.start_date }}</td>
+                        <td>{{ o.completed_date }}</td>
+                        <td>{{ o.status }}</td>
+                        {% if o.status != 'Completed' %}
+                        <td><a class="btn btn-primary" href="/order/completion/{{data.user.id}}/{{o.id}}">Completed</a></td>
+                        {% endif%}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

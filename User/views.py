@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from User.models import Worker
+from User.models import Worker, UserProfile
+from WorkOrder.models import Quote, Order
 from User.forms import UserForm, WorkerForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -50,11 +52,10 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request,user)
-                #return redirect('/')
                 if is_user_profile(user):
-                    return HttpResponse("You're a user")
+                    return redirect('/')
                 else:
-                    return HttpResponse("You're a worker")
+                    return HttpResponseRedirect('workerprofile/%d' %user.id)
             else:
                 return HttpResponse("Your account was inactive.")
         else:
@@ -74,3 +75,35 @@ def is_user_profile(user_profile):
         return False
     else:
         return True
+
+def userprofile_info(request, profile_id):
+    data = UserProfile.objects.filter(user__id = profile_id)
+    quotes = Quote.objects.filter(user_id_id = data[0].id).filter(processed = False)
+    orders = Order.objects.filter(user_id = data[0].id)
+    return render(request, 'User/userprofile.html', {'data':data[0], 'quotes':quotes, 'orders':orders})
+
+def save_userprofile(request, profile_id):
+    if request.method == 'POST':
+        data = UserProfile.objects.get(id=profile_id)
+        data.first_name = request.POST.get('first_name')
+        data.last_name = request.POST.get('last_name')
+        data.phone = request.POST.get('phone')
+        data.address = request.POST.get('address')
+        data.save()
+    return redirect('/')
+
+def workerprofile(request, userid):
+    data = Worker.objects.filter(user__id = userid)
+    quotes = Quote.objects.filter(worker_id_id = data[0].id).filter(processed = False)
+    orders = Order.objects.filter(worker_id = data[0].id)
+    return render(request, 'User/workerprofile.html', {'data':data[0], 'quotes':quotes, 'orders':orders})
+
+def save_workerprofile(request, profile_id):
+    if request.method == 'POST':
+        data = Worker.objects.get(id=profile_id)
+        data.first_name = request.POST.get('first_name')
+        data.last_name = request.POST.get('last_name')
+        data.phone = request.POST.get('phone')
+        data.basic_charge = request.POST.get('basic_charge')
+        data.save()
+    return redirect('/user/user_login/workerprofile/%d' %data.user.id)

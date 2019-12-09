@@ -12,4 +12,8 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^user_login/$', views.user_login, name='user_login'),
     url(r'^user_logout/$', views.user_logout, name='user_logout'),
+    path('userprofile/<int:profile_id>', views.userprofile_info, name='userprofile_info'),
+    path('save_userprofile/<int:profile_id>', views.save_userprofile, name='save_userprofile'),
+    url(r'^user_login/workerprofile/(\d+)', views.workerprofile, name='workerprofile'),
+    path('save_workerprofile/<int:profile_id>', views.save_workerprofile, name='save_workerprofile'),
 ]

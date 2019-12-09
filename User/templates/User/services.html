@@ -12,7 +12,7 @@
       <h3>Name : {{ worker.first_name}} {{ worker.last_name }}</h3>
       <p>e-mail : {{ worker.user.email }}</p>
       <p>Basic Charge : {{ worker.basic_charge }}</p>
-      <button type="button" class="btn btn-primary">Book</button>
+      <a class="btn btn-primary" href="/order/quote/{{worker.id}}/{{user.id}}">Book</a>  
     </div>
   </div>
   {% endfor %}
