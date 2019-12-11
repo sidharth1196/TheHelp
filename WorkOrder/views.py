@@ -34,4 +34,7 @@ def completion(request, worker_id, order_id):
     o.completed_date = datetime.datetime.now()
     o.status = 'Completed'
     o.save()
+    w = Worker.objects.get(user__id = worker_id)
+    w.total_money = w.total_money + o.amount
+    w.save()
     return redirect('/user/user_login/workerprofile/%d' %worker_id)
